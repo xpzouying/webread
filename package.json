@@ -1,5 +1,5 @@
 {
-  "name": "readlite",
+  "name": "@xpzouying/readlite",
   "version": "0.2.1",
   "description": "Minimal HTML→Markdown CLI for AI consumption. Reads HTML on stdin, outputs clean markdown on stdout. Pluggable per-site rules.",
   "keywords": [
