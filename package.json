@@ -1,5 +1,5 @@
 {
-  "name": "@xpzouying/readlite",
+  "name": "webread",
   "version": "0.2.1",
   "description": "Minimal HTML→Markdown CLI for AI consumption. Reads HTML on stdin, outputs clean markdown on stdout. Pluggable per-site rules.",
   "keywords": [
@@ -16,17 +16,17 @@
   ],
   "license": "MIT",
   "author": "xpzouying <xpzouying@gmail.com>",
-  "homepage": "https://github.com/xpzouying/readlite#readme",
+  "homepage": "https://github.com/xpzouying/webread#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/xpzouying/readlite.git"
+    "url": "git+https://github.com/xpzouying/webread.git"
   },
   "bugs": {
-    "url": "https://github.com/xpzouying/readlite/issues"
+    "url": "https://github.com/xpzouying/webread/issues"
   },
   "type": "module",
   "bin": {
-    "readlite": "./dist/cli.js"
+    "webread": "./dist/cli.js"
   },
   "scripts": {
     "build": "tsup",

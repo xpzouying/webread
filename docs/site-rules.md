@@ -26,4 +26,4 @@ When a page produces poor markdown, add a rule.
 
 6. `pnpm build && pnpm test`, then PR.
 
-Design rationale: [original design spec](https://github.com/xpzouying/learn-skills/blob/main/docs/superpowers/specs/2026-05-03-readify-site-rules-design.md) (authored before the rename to readlite).
+Design rationale: [original design spec](https://github.com/xpzouying/learn-skills/blob/main/docs/superpowers/specs/2026-05-03-readify-site-rules-design.md) (authored before the rename to webread).

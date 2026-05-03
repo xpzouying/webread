@@ -25,10 +25,10 @@ function parseArgs(argv: string[]): Args {
 }
 
 function printHelp(): void {
-  process.stdout.write(`readlite — HTML→Markdown for AI consumption
+  process.stdout.write(`webread — HTML→Markdown for AI consumption
 
 Usage:
-  cat page.html | readlite [URL] [flags]
+  cat page.html | webread [URL] [flags]
 
 Arguments:
   URL              Source URL (optional). Used by Defuddle for relative
@@ -97,7 +97,7 @@ async function main(): Promise<void> {
   const html = await readStdin();
 
   if (!html.trim()) {
-    process.stderr.write('readlite: empty input on stdin\n');
+    process.stderr.write('webread: empty input on stdin\n');
     process.exit(1);
   }
 
@@ -118,12 +118,12 @@ async function main(): Promise<void> {
     });
     extractedHtml = result?.content;
   } catch (e: any) {
-    process.stderr.write(`readlite: extraction failed: ${e?.message ?? e}\n`);
+    process.stderr.write(`webread: extraction failed: ${e?.message ?? e}\n`);
     process.exit(1);
   }
 
   if (!extractedHtml || !extractedHtml.trim()) {
-    process.stderr.write('readlite: extraction returned empty content\n');
+    process.stderr.write('webread: extraction returned empty content\n');
     process.exit(1);
   }
 
@@ -137,7 +137,7 @@ async function main(): Promise<void> {
   let md = turndown.turndown(extractedHtml);
 
   if (!md.trim()) {
-    process.stderr.write('readlite: markdown conversion returned empty\n');
+    process.stderr.write('webread: markdown conversion returned empty\n');
     process.exit(1);
   }
 
@@ -147,6 +147,6 @@ async function main(): Promise<void> {
 }
 
 main().catch((e: any) => {
-  process.stderr.write(`readlite: unexpected error: ${e?.message ?? e}\n`);
+  process.stderr.write(`webread: unexpected error: ${e?.message ?? e}\n`);
   process.exit(1);
 });
