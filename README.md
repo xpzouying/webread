@@ -1,12 +1,12 @@
-# readlite
+# webread
 
 > Turn any web page into clean Markdown — for AI agents and humans alike.
 
-readlite extracts the article body and drops everything else: navigation, ads, comment widgets, recommendation cards, sidebars. Works on English and Chinese pages, with built-in tuning for high-volume Chinese sites like **微信公众号** and **新浪新闻**.
+webread extracts the article body and drops everything else: navigation, ads, comment widgets, recommendation cards, sidebars. Works on English and Chinese pages, with built-in tuning for high-volume Chinese sites like **微信公众号** and **新浪新闻**.
 
 ## What it does
 
-You give readlite a typical web page — full of navigation, ads, sidebars, comment widgets, recommendation cards, footer junk:
+You give webread a typical web page — full of navigation, ads, sidebars, comment widgets, recommendation cards, footer junk:
 
 ```html
 <html><body>
@@ -42,19 +42,17 @@ Tested on **微信公众号**, **新浪新闻**, Anthropic / OpenAI docs, and ma
 ## Install
 
 ```bash
-npm install -g @xpzouying/readlite
+npm install -g webread
 ```
 
-Or use without installing: `npx @xpzouying/readlite ...`
-
-After install, the command is just `readlite`.
+Or use without installing: `npx webread ...`
 
 ## Use
 
-readlite reads HTML on stdin. To fetch URLs end-to-end, pair it with **[kimi-webbridge](https://www.kimi.com/features/webbridge)** ([中文](https://www.kimi.com/zh-cn/features/webbridge)) — the page fetcher we use. **Without kimi-webbridge, readlite has no input.**
+webread reads HTML on stdin. To fetch URLs end-to-end, pair it with **[kimi-webbridge](https://www.kimi.com/features/webbridge)** ([中文](https://www.kimi.com/zh-cn/features/webbridge)) — the page fetcher we use. **Without kimi-webbridge, webread has no input.**
 
 ```bash
-cat page.html | readlite https://your-url > article.md
+cat page.html | webread https://your-url > article.md
 ```
 
 ### Flags
@@ -67,7 +65,7 @@ cat page.html | readlite https://your-url > article.md
 
 ## Built-in site tuning
 
-For sites with quirky layouts that confuse generic extractors, readlite ships per-site rules. Currently tuned: `mp.weixin.qq.com`, `*.sina.com.cn`. URLs without a matching rule go through the universal pipeline (which already handles most well-structured pages).
+For sites with quirky layouts that confuse generic extractors, webread ships per-site rules. Currently tuned: `mp.weixin.qq.com`, `*.sina.com.cn`. URLs without a matching rule go through the universal pipeline (which already handles most well-structured pages).
 
 If your favorite site produces poor output → [add a rule](./docs/site-rules.md) (6-step template recipe).
 
