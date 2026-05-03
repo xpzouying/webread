@@ -59,6 +59,11 @@ describe('site-rule: sina-news', () => {
     expect(r.stdout).not.toContain('评论排行榜');
     expect(r.stdout).not.toContain('最热评论');
     expect(r.stdout).not.toContain('登录|');
+
+    // Promo cards (weibo / podcast links injected in the article column)
+    expect(r.stdout).not.toContain('赛博对话');
+    expect(r.stdout).not.toContain('热搜时代');
+    expect(r.stdout).not.toContain('热浪之外');
   });
 
   // === Assertion 3: NON-REGRESSION ===
