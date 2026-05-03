@@ -1,4 +1,5 @@
 import type { SiteRule } from './types';
+import { wechatMpRule } from './wechat-mp';
 
 /**
  * Order = priority. List more specific rules first; first match wins.
@@ -7,7 +8,7 @@ import type { SiteRule } from './types';
  * docs/superpowers/specs/2026-05-03-readify-site-rules-design.md).
  */
 export const ALL_SITE_RULES: SiteRule[] = [
-  // Rules will be added in Task 4 (wechat-mp) and Task 5 (sina-news).
+  wechatMpRule,
 ];
 
 // Sanity check: every rule must define at least one hook.
