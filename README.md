@@ -2,6 +2,8 @@
 
 HTML → clean Markdown CLI for AI consumption. Built on [Defuddle](https://github.com/kepano/defuddle) + [Turndown](https://github.com/mixmark-io/turndown).
 
+readlite reads HTML on stdin and writes clean markdown on stdout. To turn a *URL* into markdown end-to-end, you need a tool that fetches the page first (with cookies, post-JS rendering, etc.). The intended companion is **[kimi-webbridge](https://www.kimi.com/features/webbridge)** ([中文](https://www.kimi.com/zh-cn/features/webbridge)) — a Chrome extension + local daemon that drives your real browser, so AI agents can fetch pages with your actual login sessions. **Without kimi-webbridge (or an equivalent fetcher), readlite has no input.**
+
 ## Install
 
 ```bash
@@ -22,16 +24,6 @@ cat page.html | readlite [URL] [--no-images] [--inline-links] > out.md
 | `--inline-links` | Inline link style (default: reference-style) |
 
 Exits `0` on success, `1` on form failure (extraction returned empty / threw).
-
-### With kimi-webbridge
-
-```bash
-URL="https://..."
-curl -s localhost:10086/command -d "{\"action\":\"navigate\",\"args\":{\"url\":\"$URL\"}}" >/dev/null
-sleep 3
-curl -s localhost:10086/command -d '{"action":"evaluate","args":{"code":"document.documentElement.outerHTML"}}' \
-  | jq -r '.data.value' | readlite "$URL" > out.md
-```
 
 ## Site rules
 
