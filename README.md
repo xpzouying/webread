@@ -1,4 +1,4 @@
-# readify
+# readlite
 
 HTML → clean Markdown CLI for AI consumption. Built on [Defuddle](https://github.com/kepano/defuddle) + [Turndown](https://github.com/mixmark-io/turndown).
 
@@ -6,13 +6,13 @@ HTML → clean Markdown CLI for AI consumption. Built on [Defuddle](https://gith
 
 ```bash
 pnpm install && pnpm build
-npm link  # optional: makes `readify` globally available
+npm link  # optional: makes `readlite` globally available
 ```
 
 ## Use
 
 ```bash
-cat page.html | readify [URL] [--no-images] [--inline-links] > out.md
+cat page.html | readlite [URL] [--no-images] [--inline-links] > out.md
 ```
 
 | Flag | Behavior |
@@ -30,7 +30,7 @@ URL="https://..."
 curl -s localhost:10086/command -d "{\"action\":\"navigate\",\"args\":{\"url\":\"$URL\"}}" >/dev/null
 sleep 3
 curl -s localhost:10086/command -d '{"action":"evaluate","args":{"code":"document.documentElement.outerHTML"}}' \
-  | jq -r '.data.value' | readify "$URL" > out.md
+  | jq -r '.data.value' | readlite "$URL" > out.md
 ```
 
 ## Site rules

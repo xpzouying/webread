@@ -5,8 +5,7 @@ import { sinaNewsRule } from './sina-news';
 /**
  * Order = priority. List more specific rules first; first match wins.
  *
- * To add a rule: see docs/site-rules.md (or the spec at
- * docs/superpowers/specs/2026-05-03-readify-site-rules-design.md).
+ * To add a rule: see docs/site-rules.md.
  */
 export const ALL_SITE_RULES: SiteRule[] = [
   wechatMpRule,

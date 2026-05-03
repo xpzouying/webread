@@ -47,7 +47,7 @@ beforeAll(() => {
   }
 });
 
-describe('readify', () => {
+describe('readlite', () => {
   describe('claude-docs (English tech doc with code blocks)', () => {
     it('extracts clean markdown with reference-style links', async () => {
       const { html, url } = loadFixture('claude-docs');
