@@ -1,47 +1,29 @@
-# Site-rules
+# Adding a site rule
 
-readify ships a small registry of per-site clean-up rules that fire when the
-caller passes a matching URL. Universal pages (anything without a registered
-rule) go through the standard pipeline unchanged.
+When a page produces poor markdown, add a rule.
 
-Active rules live under `src/site-rules/`. Each rule is a TypeScript module
-that exports a `SiteRule` and is registered in `src/site-rules/index.ts`.
-
-## Adding a new rule
-
-If you observe a page that produces poor markdown:
-
-1. **Capture the page HTML** — pipe the rendered DOM (e.g. via kimi-webbridge's
-   `evaluate` tool with `document.documentElement.outerHTML`) into
-   `test/fixtures/<rule-name>/input.html`. Save the URL to `url.txt` next to it.
-
-2. **Reproduce the failure** with the current pipeline:
+1. **Capture HTML** to `test/fixtures/<name>/input.html` (also save URL to `url.txt`):
    ```bash
-   cat test/fixtures/<rule-name>/input.html | node dist/cli.js "<URL>"
+   curl -s localhost:10086/command -d "{\"action\":\"navigate\",\"args\":{\"url\":\"$URL\"}}" >/dev/null
+   sleep 3
+   curl -s localhost:10086/command -d '{"action":"evaluate","args":{"code":"document.documentElement.outerHTML"}}' \
+     | jq -r '.data.value' > test/fixtures/<name>/input.html
    ```
-   Note exactly what's wrong: missing content, sidebar leak, broken images, etc.
 
-3. **Pick the right hook**:
-   - DOM-level transform → `preProcess(doc, url)`
-   - Tell Defuddle where the article is → `defuddleOptions: { contentSelector: '...' }`
-   - Cleanup easier in markdown than DOM → `postProcess(md, url)`
+2. **Reproduce** the failure: `cat test/fixtures/<name>/input.html | node dist/cli.js "<URL>"` — note what's wrong.
 
-4. **Write the rule** at `src/site-rules/<rule-name>.ts`. Use existing rules
-   (`wechat-mp.ts`, `sina-news.ts`) as templates.
+3. **Write the rule** at `src/site-rules/<name>.ts` (copy `wechat-mp.ts` or `sina-news.ts`). Pick hook(s):
+   - `preProcess(doc, url)` — DOM transforms (remove sidebars, lift article container)
+   - `defuddleOptions` — override Defuddle config (e.g. `contentSelector`)
+   - `postProcess(md, url)` — markdown cleanup
 
-5. **Register** the rule in `src/site-rules/index.ts`. Place more specific rules
-   earlier in the array (first-match-wins).
+4. **Register** in `src/site-rules/index.ts` (more specific rules first; first match wins).
 
-6. **Write the integration test** at `test/site-rules/<rule-name>.test.ts`.
-   It MUST contain the three required assertions:
-   - **Match** — the rule's matcher accepts the right URL, rejects others
-   - **Improvement** — a measurable signal improves under the rule
-   - **Non-regression** — same fixture HTML with a non-matching URL is unaffected
+5. **Test** at `test/site-rules/<name>.test.ts` — three assertions required:
+   - **Match** — matcher accepts the URL, rejects others
+   - **Improvement** — a measurable signal improves
+   - **Non-regression** — same fixture with a non-matching URL is unaffected
 
-7. **Verify**: `pnpm build && pnpm test` (everything green) plus a manual
-   end-to-end run on the live URL.
+6. `pnpm build && pnpm test`, then PR.
 
-8. **Open a PR** with the rule, the test, and the fixture.
-
-For the design rationale and full architecture, see
-[`docs/superpowers/specs/2026-05-03-readify-site-rules-design.md`](../../docs/superpowers/specs/2026-05-03-readify-site-rules-design.md).
+Design rationale: [`docs/superpowers/specs/2026-05-03-readify-site-rules-design.md`](../../docs/superpowers/specs/2026-05-03-readify-site-rules-design.md).
