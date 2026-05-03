@@ -1,5 +1,6 @@
 import type { SiteRule } from './types';
 import { wechatMpRule } from './wechat-mp';
+import { sinaNewsRule } from './sina-news';
 
 /**
  * Order = priority. List more specific rules first; first match wins.
@@ -9,6 +10,7 @@ import { wechatMpRule } from './wechat-mp';
  */
 export const ALL_SITE_RULES: SiteRule[] = [
   wechatMpRule,
+  sinaNewsRule,
 ];
 
 // Sanity check: every rule must define at least one hook.
