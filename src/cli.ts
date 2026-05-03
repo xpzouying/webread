@@ -50,6 +50,47 @@ async function readStdin(): Promise<string> {
   return data;
 }
 
+// Many CMSes (WeChat MP, Medium, Substack, jQuery lazyload, etc.) ship images
+// with `src` set to a placeholder (transparent SVG / 1x1 GIF) and the real URL
+// stashed in `data-src` (or similar). Without this fix, those images render as
+// useless data: URIs in the markdown.
+const LAZY_SRC_ATTRS = [
+  'data-src',
+  'data-original',
+  'data-lazy-src',
+  'data-lazy',
+  'data-actualsrc',
+  'data-defer-src',
+];
+
+function unwrapLazyImages(document: Document): void {
+  for (const img of Array.from(document.querySelectorAll('img'))) {
+    let unwrapped = false;
+    for (const attr of LAZY_SRC_ATTRS) {
+      const real = img.getAttribute(attr);
+      if (real && real.trim()) {
+        img.setAttribute('src', real);
+        img.removeAttribute(attr);
+        unwrapped = true;
+        break;
+      }
+    }
+    if (unwrapped) {
+      // Some lazy-load CSS classes (e.g. WeChat's wx_img_placeholder,
+      // js_img_placeholder) trigger downstream extractors' clutter rules
+      // even after we've swapped in the real src. Strip those hints.
+      const cls = img.getAttribute('class');
+      if (cls) {
+        const cleaned = cls
+          .split(/\s+/)
+          .filter((c) => !/placeholder|lazy|loading/i.test(c))
+          .join(' ');
+        if (cleaned !== cls) img.setAttribute('class', cleaned);
+      }
+    }
+  }
+}
+
 async function main(): Promise<void> {
   const { url, noImages, inlineLinks } = parseArgs(process.argv.slice(2));
   const html = await readStdin();
@@ -67,6 +108,7 @@ async function main(): Promise<void> {
     const virtualConsole = new VirtualConsole();
     virtualConsole.on('jsdomError', () => {});
     const dom = new JSDOM(html, { virtualConsole, ...(url ? { url } : {}) });
+    unwrapLazyImages(dom.window.document);
     const result = await Defuddle(dom, url, {
       markdown: false,
       removeImages: noImages,
