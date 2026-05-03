@@ -1,6 +1,7 @@
 import { Defuddle } from 'defuddle/node';
 import { JSDOM, VirtualConsole } from 'jsdom';
 import TurndownService from 'turndown';
+import { ALL_SITE_RULES, findRule } from './site-rules/index.js';
 
 interface Args {
   url?: string;
@@ -100,18 +101,20 @@ async function main(): Promise<void> {
     process.exit(1);
   }
 
+  const rule = findRule(ALL_SITE_RULES, url);
+
   let extractedHtml: string | undefined;
   try {
-    // We don't render styles, run scripts, or load resources, so jsdom's
-    // diagnostic events are all noise for our use case. Silence them; if
-    // extraction truly fails it surfaces as empty content, which we handle.
     const virtualConsole = new VirtualConsole();
     virtualConsole.on('jsdomError', () => {});
     const dom = new JSDOM(html, { virtualConsole, ...(url ? { url } : {}) });
     unwrapLazyImages(dom.window.document);
+    if (rule?.preProcess) rule.preProcess(dom.window.document, url!);
+
     const result = await Defuddle(dom, url, {
       markdown: false,
       removeImages: noImages,
+      ...rule?.defuddleOptions,
     });
     extractedHtml = result?.content;
   } catch (e: any) {
@@ -131,12 +134,14 @@ async function main(): Promise<void> {
     bulletListMarker: '-',
   });
 
-  const md = turndown.turndown(extractedHtml);
+  let md = turndown.turndown(extractedHtml);
 
   if (!md.trim()) {
     process.stderr.write('readify: markdown conversion returned empty\n');
     process.exit(1);
   }
+
+  if (rule?.postProcess) md = rule.postProcess(md, url!);
 
   process.stdout.write(md);
 }
