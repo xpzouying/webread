@@ -42,10 +42,12 @@ Tested on **微信公众号**, **新浪新闻**, Anthropic / OpenAI docs, and ma
 ## Install
 
 ```bash
-npm install -g readlite
+npm install -g @xpzouying/readlite
 ```
 
-Or use without installing: `npx readlite ...`
+Or use without installing: `npx @xpzouying/readlite ...`
+
+After install, the command is just `readlite`.
 
 ## Use
 
