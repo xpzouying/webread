@@ -49,7 +49,7 @@ Or use without installing: `npx readlite ...`
 
 ## Use
 
-readlite reads HTML on stdin. To turn a *URL* into markdown end-to-end, pair it with **[kimi-webbridge](https://www.kimi.com/features/webbridge)** ([中文](https://www.kimi.com/zh-cn/features/webbridge)) — a Chrome extension that drives your real browser, so you (or your AI agent) can fetch pages with your actual login sessions and post-JS-rendered DOM. **kimi-webbridge is required**: without it, readlite has no input.
+readlite reads HTML on stdin. To fetch URLs end-to-end, pair it with **[kimi-webbridge](https://www.kimi.com/features/webbridge)** ([中文](https://www.kimi.com/zh-cn/features/webbridge)) — the page fetcher we use. **Without kimi-webbridge, readlite has no input.**
 
 ```bash
 cat page.html | readlite https://your-url > article.md
