@@ -4,16 +4,40 @@
 
 readlite extracts the article body and drops everything else: navigation, ads, comment widgets, recommendation cards, sidebars. Works on English and Chinese pages, with built-in tuning for high-volume Chinese sites like **微信公众号** and **新浪新闻**.
 
-## What you get
+## What it does
 
-| Source | HTML | Markdown | Reduction |
-|---|---|---|---|
-| 微信公众号 article | 4.0 MB | 24 KB | **×159** |
-| 新浪新闻 article | 115 KB | 0.6 KB | **×180** |
-| Anthropic docs (English) | 1.8 MB | 38 KB | ×47 |
-| OpenAI docs (English) | 269 KB | 9 KB | ×28 |
+You give readlite a typical web page — full of navigation, ads, sidebars, comment widgets, recommendation cards, footer junk:
 
-Images preserved as direct CDN links · code blocks intact · links collected at the end (reference-style).
+```html
+<html><body>
+  <nav>Sign in · Subscribe · About</nav>
+  <header><img src="banner-ad.jpg"></header>
+  <article>
+    <h1>How prompt caching works</h1>
+    <p>Prompt caching lets you reuse common prefixes across requests…</p>
+    <pre><code class="python">client.messages.create({...})</code></pre>
+  </article>
+  <aside>
+    <h3>Related posts</h3><ul>…</ul>
+    <h3>Comments (42)</h3>…
+  </aside>
+  <footer>© 2026 · Privacy · Terms</footer>
+</body></html>
+```
+
+You get back the article — clean Markdown, ready to feed an LLM:
+
+````markdown
+# How prompt caching works
+
+Prompt caching lets you reuse common prefixes across requests…
+
+```python
+client.messages.create({...})
+```
+````
+
+Tested on **微信公众号**, **新浪新闻**, Anthropic / OpenAI docs, and many others. Code blocks, images, and inline links are preserved; nav, sidebar, comments, footer, and recommendation widgets are stripped.
 
 ## Install
 
